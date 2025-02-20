@@ -38,6 +38,7 @@ const editAssetRequest = (
     JSON.stringify({
       alternativeText: asset.alternativeText,
       caption: asset.caption,
+      localized_caption: asset.localized_caption,
       folder: asset.folder,
       name: asset.name,
     })

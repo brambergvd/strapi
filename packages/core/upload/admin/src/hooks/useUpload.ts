@@ -21,7 +21,7 @@ const uploadAsset = (
   onProgress: (progress: number) => void,
   post: FetchClient['post']
 ) => {
-  const { rawFile, caption, name, alternativeText } = asset;
+  const { rawFile, caption, localized_caption, name, alternativeText } = asset;
   const formData = new FormData();
 
   formData.append('files', rawFile!);
@@ -31,6 +31,7 @@ const uploadAsset = (
     JSON.stringify({
       name,
       caption,
+      localized_caption,
       alternativeText,
       folder: folderId,
     })

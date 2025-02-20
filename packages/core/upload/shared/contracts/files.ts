@@ -61,6 +61,7 @@ export interface File {
   name: string;
   alternativeText?: string | null;
   caption?: string | null;
+  localized_caption?: object | null;
   width?: number | null;
   height?: number | null;
   formats?:

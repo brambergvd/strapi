@@ -6,6 +6,7 @@ const fileInfoSchema = yup.object({
   name: yup.string().nullable(),
   alternativeText: yup.string().nullable(),
   caption: yup.string().nullable(),
+  localized_caption: yup.object().nullable(),
   folder: yup
     .strapiID()
     .nullable()

@@ -10,6 +10,7 @@ export interface File {
   name: string;
   alternativeText?: string | null;
   caption?: string | null;
+  localized_caption?: object | null;
   width?: number;
   height?: number;
   formats?: Record<string, unknown>;
@@ -72,5 +73,6 @@ export type FileInfo = {
   name?: string | null;
   alternativeText?: string | null;
   caption?: string | null;
+  localized_caption?: object | null;
   folder?: number;
 };

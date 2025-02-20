@@ -5,6 +5,7 @@ import adminSettings from './admin-settings';
 import adminUpload from './admin-upload';
 import contentApi from './content-api';
 import viewConfiguration from './view-configuration';
+import i18n from './i18n';
 
 export const controllers = {
   'admin-file': adminFile,
@@ -14,4 +15,5 @@ export const controllers = {
   'admin-upload': adminUpload,
   'content-api': contentApi,
   'view-configuration': viewConfiguration,
+  'i18n': i18n,
 };

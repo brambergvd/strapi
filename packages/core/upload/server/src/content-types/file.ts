@@ -34,6 +34,10 @@ export default {
         type: 'string',
         configurable: false,
       },
+      localized_caption: {
+        type: 'json',
+        configurable: false,
+      },
       width: {
         type: 'integer',
         configurable: false,

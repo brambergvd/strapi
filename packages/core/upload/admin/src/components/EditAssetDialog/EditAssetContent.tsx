@@ -32,6 +32,9 @@ import { DialogHeader } from './DialogHeader';
 import { PreviewBox } from './PreviewBox/PreviewBox';
 import { ReplaceMediaButton } from './ReplaceMediaButton';
 
+// NOTE added by @brambergvd
+import { useLocales } from '../../hooks/useLocales';
+
 import type { File as FileDefinition, RawFile } from '../../../../shared/contracts/files';
 
 const LoadingBody = styled(Flex)`
@@ -43,8 +46,22 @@ const fileInfoSchema = yup.object({
   name: yup.string().required(),
   alternativeText: yup.string(),
   caption: yup.string(),
+  localized_caption: yup.object().nullable(),
   folder: yup.number(),
 });
+
+interface Locale {
+  code: string;
+  name: string;
+  createdAt: string;
+  documentId: string;
+  locale: any;
+}
+
+interface LocaleOption {
+  code: string;
+  label: string;
+}
 
 export interface Asset extends Omit<FileDefinition, 'folder'> {
   isLocal?: boolean;
@@ -65,6 +82,7 @@ interface FormInitialData {
   name?: string;
   alternativeText?: string;
   caption?: string;
+  localized_caption?: object;
   parent?: {
     value?: number;
     label: string;
@@ -89,6 +107,23 @@ export const EditAssetContent = ({
   const { data: folderStructure, isLoading: folderStructureIsLoading } = useFolderStructure({
     enabled: true,
   });
+
+  // NOTE added by @brambergvd
+  const {
+      data: localesData,
+      isLoading: isLoadingLocales,
+      error: errorLocales,
+    } = useLocales();
+
+  const localizedCaptionOptions = localesData?.locales?.map((locale: Locale) => {
+    return {
+      code: locale.code,
+      label: locale.name?.split(' ')[0],
+    }
+  })
+
+  let initialLocalizedCaption = localizedCaptionOptions?.reduce((acc: any, locale: any) => ({ ...acc, [locale.code]: '' }), {})
+  // NOTE added by @brambergvd
 
   const handleSubmit = async (values: FormInitialData) => {
     const nextAsset = { ...asset, ...values, folder: values.parent?.value } as Asset;
@@ -149,6 +184,7 @@ export const EditAssetContent = ({
     name: asset?.name,
     alternativeText: asset?.alternativeText ?? undefined,
     caption: asset?.caption ?? undefined,
+    localized_caption: asset?.localized_caption ?? initialLocalizedCaption,
     parent: {
       value: activeFolderId ?? undefined,
       label:
@@ -185,6 +221,20 @@ export const EditAssetContent = ({
       </>
     );
   }
+
+  // NOTE added by @brambergvd
+  const handleChangeLocalizedCaption = (e: React.ChangeEvent<HTMLInputElement>, field: any, locale: string,  setFieldValue: Function) => {
+    const value = e.target.value;
+    let fieldToUpdate = field || initialLocalizedCaption;
+    fieldToUpdate[locale] = value
+    setFieldValue('localized_caption', fieldToUpdate)
+  };
+
+  const getLocalizedCaptionValue = (field: object, locale: string) => {
+    if (!field) return
+    return (field as any)[locale]
+  }
+  // NOTE added by @brambergvd
 
   return (
     <Formik
@@ -297,19 +347,46 @@ export const EditAssetContent = ({
                       <Field.Error />
                     </Field.Root>
 
-                    <Field.Root name="caption" error={errors.caption}>
-                      <Field.Label>
-                        {formatMessage({
-                          id: getTrad('form.input.label.file-caption'),
-                          defaultMessage: 'Caption',
-                        })}
-                      </Field.Label>
-                      <TextInput
-                        value={values.caption}
-                        onChange={handleChange}
-                        disabled={formDisabled}
-                      />
-                    </Field.Root>
+                    {/* TODO: add toggles */}
+
+                    {localesData?.locales?.length ? (
+                      <Flex direction="column" alignItems="stretch" gap={3}>
+                        <Field.Label>
+                          Localized captions
+                        </Field.Label>
+
+                        {localizedCaptionOptions.map((locale: LocaleOption, index: number) => (
+                          <Field.Root
+                            key={index}
+                          >
+                            <Field.Label>
+                              {locale?.label}
+                            </Field.Label>
+
+                            <TextInput
+                              value={getLocalizedCaptionValue(values.localized_caption!, locale?.code)}
+                              onChange={(value) => {
+                                handleChangeLocalizedCaption(value, values.localized_caption, locale?.code, setFieldValue);
+                              }}
+                            />
+                          </Field.Root>
+                        ))}
+                      </Flex>
+                    ) : (
+                      <Field.Root name="caption" error={errors.caption}>
+                        <Field.Label>
+                          {formatMessage({
+                            id: getTrad('form.input.label.file-caption'),
+                            defaultMessage: 'Caption',
+                          })}
+                        </Field.Label>
+                        <TextInput
+                          value={values.caption}
+                          onChange={handleChange}
+                          disabled={formDisabled}
+                        />
+                      </Field.Root>
+                    )}
 
                     <Flex direction="column" alignItems="stretch" gap={1}>
                       <Field.Root name="parent" id="asset-folder">

@@ -201,5 +201,12 @@ export const routes = {
         ],
       },
     },
+
+    // @NOTE: Added by @brambergvd
+    {
+      method: 'GET',
+      path: '/locales',
+      handler: 'i18n.getLocales',
+    },
   ],
 };
