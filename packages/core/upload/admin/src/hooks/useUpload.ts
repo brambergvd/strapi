@@ -21,7 +21,7 @@ const uploadAsset = (
   onProgress: (progress: number) => void,
   post: FetchClient['post']
 ) => {
-  const { rawFile, caption, localized_caption, name, alternativeText } = asset;
+  const { rawFile, caption, localized_caption, hideFromHomepage, objectFitContain, name, alternativeText } = asset;
   const formData = new FormData();
 
   formData.append('files', rawFile!);
@@ -32,6 +32,8 @@ const uploadAsset = (
       name,
       caption,
       localized_caption,
+      hideFromHomepage,
+      objectFitContain,
       alternativeText,
       folder: folderId,
     })

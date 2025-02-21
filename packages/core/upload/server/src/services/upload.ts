@@ -155,6 +155,8 @@ export default ({ strapi }: { strapi: Core.Strapi }) => {
       alternativeText: fileInfo.alternativeText,
       caption: fileInfo.caption,
       localized_caption: fileInfo.localized_caption,
+      hideFromHomepage: fileInfo.hideFromHomepage,
+      objectFitContain: fileInfo.objectFitContain,
       folder: fileInfo.folder,
       folderPath: await fileService.getFolderPath(fileInfo.folder),
       hash: generateFileName(basename),
@@ -346,7 +348,7 @@ export default ({ strapi }: { strapi: Core.Strapi }) => {
 
   async function updateFileInfo(
     id: ID,
-    { name, alternativeText, caption, localized_caption, folder }: FileInfo,
+    { name, alternativeText, caption, localized_caption, hideFromHomepage, objectFitContain, folder }: FileInfo,
     opts?: CommonOptions
   ) {
     const { user } = opts ?? {};
@@ -365,6 +367,8 @@ export default ({ strapi }: { strapi: Core.Strapi }) => {
       alternativeText: _.isNil(alternativeText) ? dbFile.alternativeText : alternativeText,
       caption: _.isNil(caption) ? dbFile.caption : caption,
       localized_caption: _.isNil(localized_caption) ? dbFile.localized_caption : localized_caption,
+      hideFromHomepage: _.isNil(hideFromHomepage) ? dbFile.hideFromHomepage : hideFromHomepage,
+      objectFitContain: _.isNil(objectFitContain) ? dbFile.objectFitContain : objectFitContain,
       folder: _.isUndefined(folder) ? dbFile.folder : folder,
       folderPath: _.isUndefined(folder) ? dbFile.path : await fileService.getFolderPath(folder),
     };

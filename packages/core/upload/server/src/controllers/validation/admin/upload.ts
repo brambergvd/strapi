@@ -7,6 +7,8 @@ const fileInfoSchema = yup.object({
   alternativeText: yup.string().nullable(),
   caption: yup.string().nullable(),
   localized_caption: yup.object().nullable(),
+  hideFromHomepage: yup.boolean().nullable(),
+  objectFitContain: yup.boolean().nullable(),
   folder: yup
     .strapiID()
     .nullable()

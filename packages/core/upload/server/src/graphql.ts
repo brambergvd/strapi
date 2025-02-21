@@ -36,6 +36,8 @@ export const installGraphqlExtension = ({ strapi }: { strapi: Core.Strapi }) => 
         t.string('alternativeText');
         t.string('caption');
         t.string('localized_caption')
+        t.string('hideFromHomepage');
+        t.string('objectFitContain');
       },
     });
 

@@ -11,6 +11,7 @@ import {
   Field,
   Flex,
   Grid,
+  Toggle,
   Loader,
   Modal,
   TextInput,
@@ -48,6 +49,8 @@ const fileInfoSchema = yup.object({
   caption: yup.string(),
   localized_caption: yup.object().nullable(),
   folder: yup.number(),
+  hideFromHomepage: yup.boolean(),
+  objectFitContain: yup.boolean(),
 });
 
 interface Locale {
@@ -83,6 +86,8 @@ interface FormInitialData {
   alternativeText?: string;
   caption?: string;
   localized_caption?: object;
+  hideFromHomepage?: boolean;
+  objectFitContain?: boolean;
   parent?: {
     value?: number;
     label: string;
@@ -185,6 +190,8 @@ export const EditAssetContent = ({
     alternativeText: asset?.alternativeText ?? undefined,
     caption: asset?.caption ?? undefined,
     localized_caption: asset?.localized_caption ?? initialLocalizedCaption,
+    hideFromHomepage: asset?.hideFromHomepage ?? undefined,
+    objectFitContain: asset?.objectFitContain ?? undefined,
     parent: {
       value: activeFolderId ?? undefined,
       label:
@@ -225,9 +232,9 @@ export const EditAssetContent = ({
   // NOTE added by @brambergvd
   const handleChangeLocalizedCaption = (e: React.ChangeEvent<HTMLInputElement>, field: any, locale: string,  setFieldValue: Function) => {
     const value = e.target.value;
-    let fieldToUpdate = field || initialLocalizedCaption;
-    fieldToUpdate[locale] = value
-    setFieldValue('localized_caption', fieldToUpdate)
+    let newField = field || initialLocalizedCaption;
+    newField[locale] = value
+    setFieldValue('localized_caption', newField)
   };
 
   const getLocalizedCaptionValue = (field: object, locale: string) => {
@@ -347,8 +354,6 @@ export const EditAssetContent = ({
                       <Field.Error />
                     </Field.Root>
 
-                    {/* TODO: add toggles */}
-
                     {localesData?.locales?.length ? (
                       <Flex direction="column" alignItems="stretch" gap={3}>
                         <Field.Label>
@@ -387,6 +392,46 @@ export const EditAssetContent = ({
                         />
                       </Field.Root>
                     )}
+
+                    {asset?.mime?.startsWith('image') ? (
+                      <Field.Root name="hideFromHomepage" error={errors.hideFromHomepage}>
+                        <Field.Label>
+                          Exclude from homepage?
+                        </Field.Label>
+                        <Toggle
+                          aria-label="hideFromHomepage"
+                          checked={values.hideFromHomepage}
+                          name="hideFromHomepage"
+                          onLabel="Yes"
+                          offLabel="No"
+                          onChange={(e) => {
+                            handleChange({
+                              target: { name: 'hideFromHomepage', value: e.target.checked },
+                            });
+                          }}
+                        />
+                      </Field.Root>
+                    ) : null}
+
+                    {asset?.mime?.startsWith('image') ? (
+                      <Field.Root name="objectFitContain" error={errors.objectFitContain}>
+                        <Field.Label>
+                          Crop image to fit?
+                        </Field.Label>
+                        <Toggle
+                          aria-label="objectFitContain"
+                          checked={values.objectFitContain}
+                          name="objectFitContain"
+                          onLabel="Yes"
+                          offLabel="No"
+                          onChange={(e) => {
+                            handleChange({
+                              target: { name: 'objectFitContain', value: e.target.checked },
+                            });
+                          }}
+                        />
+                      </Field.Root>
+                    ) : null}
 
                     <Flex direction="column" alignItems="stretch" gap={1}>
                       <Field.Root name="parent" id="asset-folder">

@@ -62,6 +62,8 @@ export interface File {
   alternativeText?: string | null;
   caption?: string | null;
   localized_caption?: object | null;
+  hideFromHomepage?: boolean | null;
+  objectFitContain?: boolean | null;
   width?: number | null;
   height?: number | null;
   formats?:

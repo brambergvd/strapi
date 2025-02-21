@@ -39,6 +39,8 @@ const editAssetRequest = (
       alternativeText: asset.alternativeText,
       caption: asset.caption,
       localized_caption: asset.localized_caption,
+      hideFromHomepage: asset.hideFromHomepage,
+      objectFitContain: asset.objectFitContain,
       folder: asset.folder,
       name: asset.name,
     })

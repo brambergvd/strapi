@@ -38,6 +38,14 @@ export default {
         type: 'json',
         configurable: false,
       },
+      hideFromHomepage: {
+        type: 'boolean',
+        configurable: false,
+      },
+      objectFitContain: {
+        type: 'boolean',
+        configurable: false,
+      },
       width: {
         type: 'integer',
         configurable: false,

@@ -11,6 +11,8 @@ export interface File {
   alternativeText?: string | null;
   caption?: string | null;
   localized_caption?: object | null;
+  hideFromHomepage?: boolean | null;
+  objectFitContain?: boolean | null;
   width?: number;
   height?: number;
   formats?: Record<string, unknown>;
@@ -67,6 +69,7 @@ export interface UploadableFile extends Omit<File, 'id'> {
   stream?: NodeJS.ReadableStream;
   buffer?: Buffer;
   tmpWorkingDirectory?: string;
+
 }
 
 export type FileInfo = {
@@ -74,5 +77,7 @@ export type FileInfo = {
   alternativeText?: string | null;
   caption?: string | null;
   localized_caption?: object | null;
+  hideFromHomepage?: boolean | null;
+  objectFitContain?: boolean | null;
   folder?: number;
 };
